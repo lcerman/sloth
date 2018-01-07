@@ -28,15 +28,9 @@ def fullsplit(path, result=None):
         return result
     return fullsplit(head, [tail] + result)
 
-# Tell distutils to put the data_files in platform-specific installation
-# locations. See here for an explanation:
-# http://groups.google.com/group/comp.lang.python/browse_thread/thread/35ec7b2fed36eaec/2105ee4d9e8042cb
-for scheme in INSTALL_SCHEMES.values():
-    scheme['data'] = scheme['purelib']
-
 # Compile the list of packages available, because distutils doesn't have
 # an easy way to do this.
-packages, data_files = [], []
+packages = []
 root_dir = os.path.dirname(__file__)
 if root_dir != '':
     os.chdir(root_dir)
@@ -48,10 +42,8 @@ for dirpath, dirnames, filenames in os.walk(sloth_dir):
         if dirname.startswith('.'): del dirnames[i]
     if '__init__.py' in filenames:
         packages.append('.'.join(fullsplit(dirpath)))
-        if 'labeltool.ui' in filenames:
-            data_files.append([dirpath, [os.path.join(dirpath, 'labeltool.ui')]])
-    elif filenames:
-        data_files.append([dirpath, [os.path.join(dirpath, f) for f in filenames]])
+
+package_data = {'sloth.gui' : ['labeltool.ui', 'icons/*']}
 
 setup(name='sloth',
       version=sloth.VERSION,
@@ -60,6 +52,6 @@ setup(name='sloth',
       url='http://sloth.readthedocs.org/',
       requires=['importlib', 'PyQt4', 'numpy'],
       packages=packages,
-      data_files=data_files,
+      package_data=package_data,
       scripts=['sloth/bin/sloth']
 )
