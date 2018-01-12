@@ -388,6 +388,7 @@ class KeyValueModelItem(ModelItem, MutableMapping):
     def setUnlabeled(self, val):
         if val:
             self._dict['unlabeled'] = val
+            self._emitDataChanged('unlabeled')
         else:
             if 'unlabeled' in self._dict:
                 del self['unlabeled']
@@ -399,6 +400,7 @@ class KeyValueModelItem(ModelItem, MutableMapping):
     def setUnconfirmed(self, val):
         if val:
             self._dict['unconfirmed'] = val
+            self._emitDataChanged('unconfirmed')
         else:
             if 'unconfirmed' in self._dict:
                 del self['unconfirmed']
